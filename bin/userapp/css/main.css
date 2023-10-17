@@ -35,6 +35,7 @@
     -fx-text-fill: #0074e4; 
     -fx-border-color: transparent;
     -fx-underline: true; 
+    -fx-cursor: pointer;
 }
 
 .text-white{
@@ -56,6 +57,7 @@
     -fx-border-width: 1px;
     -fx-border-color: #0056b3;
     -fx-border-radius: 5px; 
+    -fx-cursor: pointer;
 }
 
 
@@ -88,6 +90,7 @@
 	-fx-font-size: 14px; 
     -fx-font-weight: bold;
     -fx-text-fill: #FFF;
+    -fx-cursor: pointer;
 		
 }
 

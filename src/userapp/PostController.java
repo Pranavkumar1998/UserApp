@@ -25,6 +25,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.Node;
 
@@ -51,12 +52,11 @@ public class PostController {
 	@FXML
 	TextField noPostField;
 
-	@FXML
-	TextField postUserField;
+	ComboBox<String> postUserField;
 
 	@FXML
 	Label headerLabel;
-	
+
 	@FXML
 	Hyperlink vipAccessSubMenu1, vipAccessSubMenu2;
 
@@ -65,6 +65,9 @@ public class PostController {
 
 	@FXML
 	VBox retrievePostPanel;
+
+	@FXML
+	HBox usernameListHolder;
 
 	@FXML
 	GridPane blankPanel;
@@ -80,11 +83,12 @@ public class PostController {
 		addPostPanel.setVisible(false);
 		retrievePostPanel.setVisible(false);
 		blankPanel.setVisible(true);
-		if(user.isVip()) {
+		if (user.isVip()) {
 			vipAccessSubMenu1.setVisible(true);
-			vipAccessSubMenu1.setVisible(true);
+			vipAccessSubMenu2.setVisible(true);
 		}
 
+		this.loadUsernames();
 	}
 
 	public void navigateScene(ActionEvent event) {
@@ -101,7 +105,21 @@ public class PostController {
 
 	}
 
-	
+	private void loadUsernames() {
+
+		Model model = new Model();
+		String[] usernames = model.getUsernames();
+		model.close();
+		postUserField = new ComboBox<>();
+		postUserField.getItems().addAll(usernames);
+		postUserField.getStyleClass().add("generic-input");
+		postUserField.maxWidth(100);
+		
+		usernameListHolder.getChildren().add(postUserField);
+
+		
+	}
+
 	public void showRetrievePostPanel() {
 
 		retrievePostPanel.setVisible(true);
@@ -111,7 +129,6 @@ public class PostController {
 		headerLabel.setText("Retrieve Post(s)");
 
 	}
-	
 
 	public void showAddPostPanel() {
 
@@ -243,7 +260,7 @@ public class PostController {
 			return;
 		}
 
-		if (model.insertPost(1, postId_n, postContent, author, likes_n, shares_n)) {
+		if (model.insertPost(user.getUserId(), postId_n, postContent, author, likes_n, shares_n)) {
 
 			// Clear form
 			postIdField.setText("");
@@ -302,7 +319,11 @@ public class PostController {
 	public void retrievePosts(ActionEvent event) {
 
 		String noPost = noPostField.getText();
-		String postUser = postUserField.getText();
+		String postUser = postUserField.getValue();
+		
+		if(postUser == null) {
+			postUser = "All User";
+		}
 
 		String[] errors = new String[2];
 		errors[0] = Validator.isInt("No of Posts", noPost);
@@ -339,9 +360,14 @@ public class PostController {
 
 	public void showTable(Post[] posts) {
 
+		//Clear the table holder
+		tableHolder.getChildren().clear();
+		
 		// Create a TableView
 		TableView<Post> tableView = new TableView<>();
-
+		
+		tableView.setMaxHeight(Double.MAX_VALUE);
+		
 		// Create TableColumn instances for each column
 		TableColumn<Post, Integer> postIdColumn = new TableColumn<>("Post ID");
 		TableColumn<Post, String> postContentColumn = new TableColumn<>("Post Content");

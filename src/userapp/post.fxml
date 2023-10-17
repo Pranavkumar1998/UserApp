@@ -148,15 +148,12 @@
 
 
 
-						<TextField
+						<TextField fx:id="noPostField"
 							styleClass="generic-input, number-input, small-input"
 							promptText="No. of Posts" GridPane.columnIndex="3"
 							GridPane.rowIndex="1" />
-						<TextField
-							styleClass="generic-input, number-input, small-input"
-							promptText="No. of Posts" GridPane.columnIndex="4"
-							GridPane.rowIndex="1" />
-						<Button onAction="#createPost"
+						<HBox fx:id="usernameListHolder" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+						<Button onAction="#retrievePosts"
 							styleClass="submit-button, small-button" text="Search"
 							GridPane.columnIndex="5" GridPane.rowIndex="1" />
 

@@ -188,6 +188,36 @@ public class Model {
 
 		return null; // User not found
 	}
+	
+	
+	public String[] getUsernames() {
+			
+		String sql = "SELECT username FROM users ORDER BY username LIMIT 5000";
+		
+		try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+		
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			List<String> usernameList = new ArrayList<>();
+			
+			usernameList.add("All User");
+			
+			while (resultSet.next()) {
+				
+				String username = resultSet.getString("username");
+
+				usernameList.add(username);
+			}
+
+			return usernameList.toArray(new String[0]);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		
+	}
 
 	public boolean postIdExist(int postId) {
 		boolean exists = false;
@@ -258,9 +288,9 @@ public class Model {
 	public Post[] getPosts(int noPost, String postUser) {
 		String sql = "";
 		if ("All User".equals(postUser)) {
-			sql = "SELECT * FROM posts ORDER BY likes LIMIT ?";
+			sql = "SELECT * FROM posts ORDER BY likes DESC LIMIT ?";
 		} else {
-			sql = "SELECT * FROM posts WHERE user_id IN (SELECT user_id FROM users WHERE username = ?) ORDER BY likes LIMIT ?";
+			sql = "SELECT * FROM posts WHERE user_id IN (SELECT user_id FROM users WHERE username = ?) ORDER BY likes DESC LIMIT ?";
 		}
 
 		try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
