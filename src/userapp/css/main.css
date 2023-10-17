@@ -1,0 +1,95 @@
+
+.generic-input {
+    -fx-min-width: 250px;
+    -fx-min-height: 35px;
+    -fx-border-width: 1px;
+    -fx-border-color: #999;
+    -fx-font-size: 16px;
+    -fx-border-style: solid;
+    -fx-border-radius: 5px;
+}
+
+.number-input {
+    -fx-min-width: 50px;
+    -fx-max-width: 100px;
+ }
+
+.generic-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.small-input{
+	-fx-min-height: 30px;
+    -fx-font-size: 14px;    
+}
+
+.h1 {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-wrap-text: true;
+}
+
+.link{
+	 -fx-background-color: transparent;
+    -fx-text-fill: #0074e4; 
+    -fx-border-color: transparent;
+    -fx-underline: true; 
+}
+
+.text-white{
+	-fx-text-fill: #FFF;
+}
+.bold{
+	-fx-font-weight: bold;
+}
+
+.primary-button{
+	-fx-font-weight: bold;
+}
+
+.submit-button {
+    -fx-background-color: #0074e4; 
+    -fx-text-fill: white;
+    -fx-font-size: 14px; 
+    -fx-padding: 10px 20px; 
+    -fx-border-width: 1px;
+    -fx-border-color: #0056b3;
+    -fx-border-radius: 5px; 
+}
+
+
+.small-button{
+    -fx-font-size: 14px; 
+    -fx-padding: 4px 10px; 
+}
+
+
+.header {
+    -fx-font-size: 24px; 
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+    -fx-border-width: 0 0 2 0; 
+    -fx-border-style: solid; 
+    -fx-border-color: #0074e4;
+}
+
+.subheader {
+    -fx-font-size: 17px; 
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+    -fx-border-width: 0 0 2 0; 
+    -fx-border-style: solid; 
+    -fx-border-color: #0074e4;
+}
+
+.menu-item{
+	
+	-fx-font-size: 14px; 
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFF;
+		
+}
+
+
+

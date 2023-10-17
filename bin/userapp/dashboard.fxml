@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets ?>
+
+
+
+<BorderPane fx:controller="userapp.DashBoardController"
+	xmlns:fx="http://javafx.com/fxml">
+
+	<top>
+		<GridPane alignment="TOP_LEFT" hgap="20" vgap="10"
+			style="-fx-background-color: #000;  -fx-padding: 5 0 5 0;">
+			<columnConstraints>
+				<ColumnConstraints minWidth="10" hgrow="SOMETIMES" />
+				<ColumnConstraints minWidth="10" hgrow="SOMETIMES" />
+				<ColumnConstraints minWidth="10" hgrow="ALWAYS" />
+				<ColumnConstraints minWidth="10" hgrow="ALWAYS" />
+			</columnConstraints>
+			<Hyperlink fx:id="dashBoardMenu" onAction="#navigateScene" styleClass="menu-item"
+				text="DashBoard" GridPane.columnIndex="0" />
+			<Hyperlink fx:id="editAccountMenu" onAction="#navigateScene" styleClass="menu-item"
+				text="Edit Profile" GridPane.columnIndex="1" />
+			<Hyperlink fx:id="postMenu" onAction="#navigateScene" styleClass="menu-item" text="Post"
+				GridPane.columnIndex="2" />
+			<Hyperlink fx:id="nonVipMenu" onAction="#navigateScene" styleClass="menu-item" text="Become a VIP"
+				GridPane.columnIndex="3" />
+			<Hyperlink fx:id="logoutMenu" onAction="#navigateScene" styleClass="menu-item" text="logout"
+				GridPane.columnIndex="4" />
+
+		</GridPane>
+	</top>
+
+	<center>
+		<VBox xmlns:fx="http://javafx.com/fxml" alignment="center"
+			style="-fx-background-color: #FF0;  -fx-padding: 0 20 0 20;">
+			<HBox alignment="CENTER"
+				style="-fx-background-color: #FF0;  -fx-padding: 30 0;">
+				<Text fx:id="welcomeText" styleClass="header"
+					text="Welcome Johnny Doely" />
+			</HBox>
+
+			<HBox alignment="center">
+				<Text styleClass="" text="What Do you want to do today?"
+					style="-fx-font-size: 16px;" />
+			</HBox>
+
+		</VBox>
+
+	</center>
+
+	<stylesheets>
+		<URL value="@css/main.css" />
+	</stylesheets>
+
+</BorderPane>

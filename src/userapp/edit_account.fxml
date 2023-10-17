@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets ?>
+
+
+
+<BorderPane fx:controller="userapp.DashBoardController"
+	xmlns:fx="http://javafx.com/fxml">
+
+	<top>
+		<GridPane alignment="TOP_LEFT" hgap="20" vgap="10"
+			style="-fx-background-color: #000;  -fx-padding: 5 0 5 0;">
+			<columnConstraints>
+				<ColumnConstraints minWidth="10" hgrow="SOMETIMES" />
+				<ColumnConstraints minWidth="10" hgrow="SOMETIMES" />
+				<ColumnConstraints minWidth="10" hgrow="ALWAYS" />
+				<ColumnConstraints minWidth="10" hgrow="ALWAYS" />
+			</columnConstraints>
+			<Hyperlink fx:id="dashBoardMenu" onAction="#navigateScene" styleClass="menu-item"
+				text="DashBoard" GridPane.columnIndex="0" />
+			<Hyperlink fx:id="editAccountMenu" onAction="#navigateScene" styleClass="menu-item"
+				text="Edit Profile" GridPane.columnIndex="1" />
+			<Hyperlink fx:id="postMenu" onAction="#navigateScene" styleClass="menu-item" text="Post"
+				GridPane.columnIndex="2" />
+			<Hyperlink fx:id="nonVipMenu" onAction="#navigateScene" styleClass="menu-item" text="Become a VIP"
+				GridPane.columnIndex="3" />
+			<Hyperlink fx:id="logoutMenu" onAction="#navigateScene" styleClass="menu-item" text="logout"
+				GridPane.columnIndex="4" />
+
+		</GridPane>
+	</top>
+
+
+	<center>
+		<VBox xmlns:fx="http://javafx.com/fxml"
+			style="-fx-background-color: #FF0;  -fx-padding: 0 20 0 20;">
+			<HBox alignment="CENTER"
+				style="-fx-background-color: #DFE; -fx-padding: 20 0;">
+				<Label fx:id="headerLabel" styleClass="subheader" text="Update your Account" />
+			</HBox>
+
+			<GridPane alignment="TOP_LEFT" hgap="20" vgap="10"
+				style="-fx-background-color: #000;  -fx-padding: 5 0 5 0;">
+				<columnConstraints>
+					<ColumnConstraints minWidth="50"
+						hgrow="SOMETIMES" />
+					<ColumnConstraints minWidth="10" hgrow="ALWAYS" />
+				</columnConstraints>
+
+				<GridPane GridPane.columnIndex="0" alignment="TOP_LEFT"
+					vgap="20" hgap="10"
+					style="-fx-background-color: #000;  -fx-padding: 5 0 5 0;">
+					<Hyperlink onAction="#showUpdateUserPanel" styleClass="menu-item" text="Update Account"
+						GridPane.rowIndex="0" />
+					<Hyperlink onAction="#showUpdatePasswordPanel" styleClass="menu-item" text="Update Password"
+						GridPane.rowIndex="1" />
+				</GridPane>
+
+
+				<GridPane fx:id="updateAccountPanel"  GridPane.columnIndex="1" hgap="20" vgap="10" alignment="CENTER"
+					style="-fx-background-color: #DFE; -fx-padding: 0 0 20 0;">
+
+					<Label styleClass="generic-label" text="Username:"
+						GridPane.columnIndex="0" GridPane.rowIndex="1" />
+
+					<Label styleClass="generic-label" text="First Name:"
+						GridPane.columnIndex="0" GridPane.rowIndex="2" />
+
+					<Label styleClass="generic-label" text="Last Name:"
+						GridPane.columnIndex="0" GridPane.rowIndex="3" />
+
+
+
+					<TextField fx:id="usernameField"
+						styleClass="generic-input" promptText="Enter username"
+						GridPane.columnIndex="1" GridPane.rowIndex="1"
+						GridPane.columnSpan="2" />
+
+					<TextField fx:id="firstNameField"
+						styleClass="generic-input" promptText="Enter First Name"
+						GridPane.columnIndex="1" GridPane.rowIndex="2"
+						GridPane.columnSpan="2" />
+
+					<TextField fx:id="lastNameField"
+						styleClass="generic-input" promptText="Enter Last Name"
+						GridPane.columnIndex="1" GridPane.rowIndex="3"
+						GridPane.columnSpan="2" />
+
+					<HBox alignment="bottom_right" GridPane.rowIndex="4"
+						GridPane.columnIndex="2">
+						<Button onAction="#updateAccount"
+							styleClass="submit-button" text="Update Account"
+							cancelButton="true" />
+					</HBox>
+
+				</GridPane>
+
+				<GridPane fx:id="updatePasswordPanel" GridPane.columnIndex="1" hgap="20" vgap="10" alignment="CENTER"
+					style="-fx-background-color: #FFF; -fx-padding: 0 0 20 0;">
+
+
+					<Label styleClass="generic-label" text="Old Password:"
+						GridPane.columnIndex="0" GridPane.rowIndex="0" />
+					<Label styleClass="generic-label" text="New Password:"
+						GridPane.columnIndex="0" GridPane.rowIndex="1" />
+
+					<PasswordField fx:id="oldPasswordField"
+						promptText="Enter old  password" styleClass="generic-input"
+						GridPane.columnIndex="1" GridPane.rowIndex="0"
+						GridPane.columnSpan="2" />
+					<PasswordField fx:id="passwordField"
+						promptText="Enter new  password" styleClass="generic-input"
+						GridPane.columnIndex="1" GridPane.rowIndex="1"
+						GridPane.columnSpan="2" />
+
+					<HBox alignment="bottom_right" GridPane.rowIndex="3"
+						GridPane.columnIndex="2">
+						<Button onAction="#updatePassword"
+							styleClass="submit-button" text="Update Password"
+							cancelButton="true" />
+					</HBox>
+
+				</GridPane>
+
+			</GridPane>
+
+		</VBox>
+
+	</center>
+
+	<stylesheets>
+		<URL value="@css/main.css" />
+	</stylesheets>
+
+</BorderPane>

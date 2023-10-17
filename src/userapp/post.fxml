@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets ?>
+
+
+
+<BorderPane fx:controller="userapp.PostController"
+	xmlns:fx="http://javafx.com/fxml">
+
+	<top>
+		<GridPane alignment="TOP_LEFT" hgap="20" vgap="10"
+			style="-fx-background-color: #000;  -fx-padding: 5 0 5 0;">
+			<columnConstraints>
+				<ColumnConstraints minWidth="10" hgrow="SOMETIMES" />
+				<ColumnConstraints minWidth="10" hgrow="SOMETIMES" />
+				<ColumnConstraints minWidth="10" hgrow="ALWAYS" />
+				<ColumnConstraints minWidth="10" hgrow="ALWAYS" />
+			</columnConstraints>
+			<Hyperlink fx:id="dashBoardMenu" onAction="#navigateScene" styleClass="menu-item"
+				text="DashBoard" GridPane.columnIndex="0" />
+			<Hyperlink fx:id="editAccountMenu" onAction="#navigateScene" styleClass="menu-item"
+				text="Edit Profile" GridPane.columnIndex="1" />
+			<Hyperlink fx:id="postMenu" onAction="#navigateScene" styleClass="menu-item" text="Post"
+				GridPane.columnIndex="2" />
+			<Hyperlink fx:id="nonVipMenu" onAction="#navigateScene" styleClass="menu-item" text="Become a VIP"
+				GridPane.columnIndex="3" />
+			<Hyperlink fx:id="logoutMenu" onAction="#navigateScene" styleClass="menu-item" text="logout"
+				GridPane.columnIndex="4" />
+
+		</GridPane>
+	</top>
+
+
+	<center>
+		<VBox xmlns:fx="http://javafx.com/fxml"
+			style="-fx-background-color: #FF0;  -fx-padding: 0 20 0 20;">
+
+			<HBox alignment="CENTER" style="-fx-padding: 20 0;">
+				<Label fx:id="headerLabel" styleClass="header" text="Post" />
+			</HBox>
+
+
+			<GridPane alignment="TOP_LEFT" hgap="20" vgap="10"
+				style="-fx-background-color: #000;  -fx-padding: 5 0 5 0;">
+				<columnConstraints>
+					<ColumnConstraints minWidth="50"
+						hgrow="SOMETIMES" />
+					<ColumnConstraints minWidth="10" hgrow="ALWAYS" />
+				</columnConstraints>
+
+
+				<GridPane GridPane.columnIndex="0" alignment="TOP_LEFT"
+					vgap="20" hgap="10"
+					style="-fx-background-color: #000;  -fx-padding: 5 0 5 0;">
+					<Hyperlink onAction="#showAddPostPanel"
+						styleClass="menu-item" text="Add Post" GridPane.rowIndex="0" />
+					<Hyperlink onAction="#showRetrievePostPanel"
+						styleClass="menu-item" text="Retrieve Post" GridPane.rowIndex="1" />
+					<Hyperlink onAction="#deletePost" styleClass="menu-item"
+						text="Delete Post" GridPane.rowIndex="2" />
+					<Hyperlink onAction="#exportPost" styleClass="menu-item"
+						text="Export Post" GridPane.rowIndex="3" />
+						<Hyperlink fx:id="vipAccessSubMenu1" visible="false" onAction="#exportPost" styleClass="menu-item"
+						text="Data Visualization" GridPane.rowIndex="4" />
+						<Hyperlink fx:id="vipAccessSubMenu2"  visible="false" onAction="#exportPost" styleClass="menu-item"
+						text="Bulk Import" GridPane.rowIndex="5" />
+
+				</GridPane>
+
+
+				<GridPane fx:id="addPostPanel" GridPane.columnIndex="1"
+					hgap="20" vgap="10" alignment="CENTER"
+					style="-fx-background-color: #DFE; -fx-padding: 0 0 20 0;">
+
+					<Label styleClass="generic-label" text="Post ID:"
+						GridPane.columnIndex="0" GridPane.rowIndex="1" />
+
+					<Label styleClass="generic-label" text="Post Content:"
+						GridPane.columnIndex="0" GridPane.rowIndex="2" />
+
+					<Label styleClass="generic-label" text="Author:"
+						GridPane.columnIndex="0" GridPane.rowIndex="3" />
+
+					<Label styleClass="generic-label" text="No. Likes:"
+						GridPane.columnIndex="0" GridPane.rowIndex="4" />
+
+					<Label styleClass="generic-label" text="No Shares:"
+						GridPane.columnIndex="2" GridPane.rowIndex="4" />
+
+
+
+					<TextField fx:id="postIdField" styleClass="generic-input"
+						promptText="Post ID" GridPane.columnIndex="1"
+						GridPane.rowIndex="1" GridPane.columnSpan="3" />
+
+					<TextArea fx:id="postContentField"
+						styleClass="generic-input" promptText="Post Content"
+						GridPane.columnIndex="1" GridPane.rowIndex="2"
+						GridPane.columnSpan="3" />
+
+					<TextField fx:id="authorField" styleClass="generic-input"
+						promptText="Authot Name" GridPane.columnIndex="1"
+						GridPane.rowIndex="3" GridPane.columnSpan="3" />
+
+
+					<TextField fx:id="likesField"
+						styleClass="generic-input, number-input" promptText="#Likes"
+						GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+					<TextField fx:id="sharesField"
+						styleClass="generic-input, number-input" promptText="#Shares"
+						GridPane.columnIndex="3" GridPane.rowIndex="4" />
+
+
+					<HBox alignment="bottom_right" GridPane.rowIndex="5"
+						GridPane.columnIndex="3">
+						<Button onAction="#createPost" styleClass="submit-button"
+							text="Add Post" />
+					</HBox>
+
+				</GridPane>
+
+				<VBox fx:id="retrievePostPanel" GridPane.columnIndex="1"
+					style="-fx-background-color: #FFF; -fx-padding: 0 0 20 0;">
+
+					<GridPane hgap="20" vgap="10" alignment="CENTER">
+
+						<Text text="Retrive Single Post" styleClass="generic-label"
+							GridPane.columnIndex="0" GridPane.rowIndex="0"
+							GridPane.columnSpan="2" />
+						<Text text="Retrive  Posts" styleClass="generic-label"
+							GridPane.columnIndex="3" GridPane.rowIndex="0"
+							GridPane.columnSpan="3" />
+
+
+						<TextField fx:id="singlePostIdField"
+							styleClass="generic-input, number-input, small-input"
+							promptText="Post ID" GridPane.columnIndex="0"
+							GridPane.rowIndex="1" />
+						<Button onAction="#retrieveSinglePost"
+							styleClass="submit-button, small-button" text="Search"
+							GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+
+
+						<TextField
+							styleClass="generic-input, number-input, small-input"
+							promptText="No. of Posts" GridPane.columnIndex="3"
+							GridPane.rowIndex="1" />
+						<TextField
+							styleClass="generic-input, number-input, small-input"
+							promptText="No. of Posts" GridPane.columnIndex="4"
+							GridPane.rowIndex="1" />
+						<Button onAction="#createPost"
+							styleClass="submit-button, small-button" text="Search"
+							GridPane.columnIndex="5" GridPane.rowIndex="1" />
+
+					</GridPane>
+
+					<VBox fx:id="tableHolder" alignment="top_left" style="-fx-padding: 0 10 20 10;">
+					</VBox>
+
+				</VBox>
+				<GridPane fx:id="blankPanel" GridPane.columnIndex="1"
+					hgap="20" vgap="10" alignment="CENTER"
+					style="-fx-background-color: #FFF; -fx-padding: 0 0 20 0;">
+
+
+				</GridPane>
+
+
+
+
+			</GridPane>
+
+
+
+		</VBox>
+
+	</center>
+
+	<stylesheets>
+		<URL value="@css/main.css" />
+	</stylesheets>
+
+</BorderPane>

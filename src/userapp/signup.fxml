@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets ?>
+
+<VBox fx:controller="userapp.AuthController"   xmlns:fx="http://javafx.com/fxml" alignment="center"
+	style="-fx-background-color: #FF0;  -fx-padding: 0 20 0 20;">
+	<HBox alignment="CENTER"
+		style="-fx-background-color: #FF0;  -fx-padding: 30 0;">
+		<Label alignment="center" styleClass="header"
+			text="Create an Account" />
+	</HBox>
+
+	<GridPane hgap="20" vgap="10" alignment="CENTER">
+
+		<Label styleClass="generic-label" text="Username:"
+			GridPane.columnIndex="0" GridPane.rowIndex="1" />
+
+		<Label styleClass="generic-label" text="First Name:"
+			GridPane.columnIndex="0" GridPane.rowIndex="2" />
+
+		<Label styleClass="generic-label" text="Last Name:"
+			GridPane.columnIndex="0" GridPane.rowIndex="3" />
+
+		<Label styleClass="generic-label" text="Password:"
+			GridPane.columnIndex="0" GridPane.rowIndex="4" />
+
+
+
+		<TextField fx:id="usernameField" styleClass="generic-input"
+			promptText="Enter usernameField" GridPane.columnIndex="1"
+			GridPane.rowIndex="1" GridPane.columnSpan="2" />
+
+		<TextField fx:id="firstNameField" styleClass="generic-input"
+			promptText="Enter First Name" GridPane.columnIndex="1"
+			GridPane.rowIndex="2" GridPane.columnSpan="2" />
+
+		<TextField fx:id="lastNameField" styleClass="generic-input"
+			promptText="Enter Last Name" GridPane.columnIndex="1"
+			GridPane.rowIndex="3" GridPane.columnSpan="2" />
+
+		<PasswordField fx:id="passwordField"
+			promptText="Enter password" styleClass="generic-input"
+			GridPane.columnIndex="1" GridPane.rowIndex="4"
+			GridPane.columnSpan="2" />
+
+		<HBox alignment="bottom_right" GridPane.rowIndex="5"
+			GridPane.columnIndex="2">
+			<Button  onAction="#createAccount" styleClass="submit-button" text="Create Account" />
+		</HBox>
+
+	</GridPane>
+	
+	<HBox alignment="center">
+		<Text styleClass="" text="Already have an account?"
+			style="-fx-font-size: 16px;" />
+		<Button onAction="#showLogin" styleClass="link, bold" text=" Login"
+			style="-fx-font-size: 16px;" />
+	</HBox>
+	<stylesheets>
+		<URL value="@css/main.css" />
+	</stylesheets>
+</VBox>
+
+	
+
