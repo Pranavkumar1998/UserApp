@@ -30,6 +30,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.Node;
@@ -58,7 +59,14 @@ public class PostController {
 	TextField noPostField;
 
 	@FXML
+	CheckBox ignoreImportError;
+	
+	@FXML
+	CheckBox firstRowHeaderField;
+	
+	@FXML
 	Text importReportText;
+
 	
 	ComboBox<String> postUserField;
 
@@ -72,7 +80,7 @@ public class PostController {
 	GridPane addPostPanel;
 
 	@FXML
-	VBox retrievePostPanel;
+	VBox retrievePostPanel, importPostPanel;
 
 	@FXML
 	HBox usernameListHolder;
@@ -88,8 +96,6 @@ public class PostController {
 	public void initialize(User user) {
 
 		this.user = user;
-		addPostPanel.setVisible(false);
-		retrievePostPanel.setVisible(false);
 		blankPanel.setVisible(true);
 		if (user.isVip()) {
 			vipAccessSubMenu1.setVisible(true);
@@ -133,6 +139,7 @@ public class PostController {
 		retrievePostPanel.setVisible(true);
 		addPostPanel.setVisible(false);
 		blankPanel.setVisible(false);
+		importPostPanel.setVisible(false);
 
 		headerLabel.setText("Retrieve Post(s)");
 
@@ -143,8 +150,20 @@ public class PostController {
 		addPostPanel.setVisible(true);
 		retrievePostPanel.setVisible(false);
 		blankPanel.setVisible(false);
+		importPostPanel.setVisible(false);
 
 		headerLabel.setText("Add Post");
+
+	}
+	
+	public void showImportPostPanel() {
+
+		addPostPanel.setVisible(false);
+		retrievePostPanel.setVisible(false);
+		blankPanel.setVisible(false);
+		importPostPanel.setVisible(true);
+
+		headerLabel.setText("Bulk Import - VIP");
 
 	}
 
@@ -153,6 +172,7 @@ public class PostController {
 		addPostPanel.setVisible(false);
 		retrievePostPanel.setVisible(false);
 		blankPanel.setVisible(true);
+		importPostPanel.setVisible(false);
 
 		headerLabel.setText("Delete Post");
 
@@ -376,7 +396,8 @@ public class PostController {
 		Button importButton = (Button) event.getSource();
 		
 		importButton.setVisible(false);
-		
+	
+		boolean shouldIgnoreImportError = ignoreImportError.isSelected();
 		
 		int lineNo = 0;
 		int importedLine = 0;
@@ -390,7 +411,7 @@ public class PostController {
 	    );
 
 	    File selectedFile = fileChooser.showOpenDialog(stage);
-
+	    
 	    if (selectedFile != null) {
 	        try (BufferedReader br = new BufferedReader(new FileReader(selectedFile))) {
 	            String line;
@@ -400,6 +421,11 @@ public class PostController {
 	            while ((line = br.readLine()) != null) {
 	            	lineNo++;
 	            	
+	            	// First row is header
+	            	if(lineNo == 1 && firstRowHeaderField.isSelected()) {
+	            		continue;
+	            	}
+	            	
 	                String[] csvline = line.split(","); // Assuming CSV format
 
 	                // Check if the CSV line has the expected number of elements
@@ -407,7 +433,12 @@ public class PostController {
 	                	showImportReport("error",  "Invalid CSV format at line: " + lineNo);
 	                    model.rollback();
 	                    hasError = true;
-	                    break;
+	                    if(! shouldIgnoreImportError) {
+	                    	break;
+	                    }
+	                    else {
+	                    	continue;
+	                    }
 	                }
 
 	                String postId = csvline[0].trim();
@@ -439,7 +470,12 @@ public class PostController {
 	                	showImportReport("error",  "Error! at line: "+  lineNo + " \n " + allErrors);
 	                    model.rollback();
 	                    hasError = true;
-	                    break;
+	                    if(! shouldIgnoreImportError) {
+	                    	break;
+	                    }
+	                    else {
+	                    	continue;
+	                    }
 	                }
 
 	                int postId_n = Integer.parseInt(postId);
@@ -452,7 +488,12 @@ public class PostController {
 	                	showImportReport("error",  "Post Id: '" + postId + "' already exists at line: "+  lineNo + " \n " + allErrors);
 	                    model.rollback();
 	                    hasError = true;
-	                    break;
+	                    if(! shouldIgnoreImportError) {
+	                    	break;
+	                    }
+	                    else {
+	                    	continue;
+	                    }
 	                }
 
 	                // Insert the post data into the database
@@ -462,17 +503,28 @@ public class PostController {
 	                	showImportReport("success",  "Importing... ("+ importedLine + "post imported)");
 	                
 	                } else {
-	                	showImportReport("error",  "Dtabase Error. Row not saved at line: "+  lineNo);
+	                	showImportReport("error",  "Database Error. Row not saved at line: "+  lineNo);
 	                    model.rollback();
 	                    hasError = true;
-	                    break;
+	                    if(! shouldIgnoreImportError) {
+	                    	break;
+	                    }
+	                    else {
+	                    	continue;
+	                    }
 	                }
 	            }
 	            
 	            if(importedLine > 0 && !hasError) {
-	            	showImportReport("complete",  "Import Completed ("+ importedLine + "post imported)");
+	            	model.commit();
+	            	showImportReport("complete",  "Import Completed ("+ importedLine + " post imported)");
 	            }
-	            if(importedLine == 0 && !hasError) {
+	            else if(importedLine > 0 && shouldIgnoreImportError) {
+	            	model.commit();
+	            	showImportReport("complete",  "Import Completed ("+ importedLine + " post imported)");
+	            }
+	            
+	            else if(importedLine == 0 && !hasError) {
 	            	showImportReport("complete",  "No post imported");
 	            }
 
@@ -483,10 +535,10 @@ public class PostController {
 	            showImportReport("error",  "Failed to read the file.");
 	        }
 	        
-	        
-	        importButton.setVisible(true);
 	    }
+	    importButton.setVisible(true);
 	}	
+	
 	
 	private void showImportReport(String type, String message) {
 		
@@ -498,7 +550,7 @@ public class PostController {
 			message = message + "\n" + " Rolled back, No row saved";
 			importReportText.setStyle("-fx-fill: red; -fx-font-style: italic; -fx-font-size: 14;");
 			importReportText.setText(message);
-			Alerts.show("error", "Import Error!", message, "");
+//			Alerts.show("error", "Import Error!", message, "");
 		}
 		else if(type == "success") {
 			importReportText.setStyle("-fx-fill: blue; -fx-font-style: italic; -fx-font-size: 14;");
@@ -513,6 +565,159 @@ public class PostController {
 		
 		
 	}
+	
+
+	
+	public void importPost(ActionEvent event) {
+		
+		Scene scene = ((Node) event.getSource()).getScene();
+		Stage stage = (Stage) scene.getWindow();
+		
+		Button importButton = (Button) event.getSource();
+		
+		importButton.setVisible(false);
+	
+		boolean shouldIgnoreImportError = ignoreImportError.isSelected();
+		
+		int lineNo = 0;
+		int importedLine = 0;
+		boolean hasError = false;
+		
+	    FileChooser fileChooser = new FileChooser();
+	    fileChooser.setTitle("Open Resource File");
+	    fileChooser.getExtensionFilters().addAll(
+	            new ExtensionFilter("Text Files", "*.txt"),
+	            new ExtensionFilter("CSV Files", "*.csv")
+	    );
+
+	    File selectedFile = fileChooser.showOpenDialog(stage);
+	    
+	    if (selectedFile != null) {
+	        try (BufferedReader br = new BufferedReader(new FileReader(selectedFile))) {
+	            String line;
+	            Model model = new Model();
+	            model.startTransaction();
+
+	            while ((line = br.readLine()) != null) {
+	            	lineNo++;
+	            	
+	            	// First row is header
+	            	if(lineNo == 1 && firstRowHeaderField.isSelected()) {
+	            		continue;
+	            	}
+	            	
+	                String[] csvline = line.split(","); // Assuming CSV format
+
+	                // Check if the CSV line has the expected number of elements
+	                if (csvline.length < 6) {
+	                	showImportReport("error",  "Invalid CSV format at line: " + lineNo);
+	                    model.rollback();
+	                    hasError = true;
+	                    if(! shouldIgnoreImportError) {
+	                    	break;
+	                    }
+	                    else {
+	                    	continue;
+	                    }
+	                }
+
+	                String postId = csvline[0].trim();
+	                String postContent = csvline[1].trim();
+	                String author = csvline[2].trim();
+	                String likes = csvline[3].trim();
+	                String shares = csvline[4].trim();
+	                String createdAt = csvline[5].trim();
+	                
+	                //Sometimes there might be empty rows
+	                if(postId.equals("") && postContent.equals("") && author.equals("") && likes.equals("") && shares.equals("") && createdAt.equals("")){
+	                	continue;
+	                }
+	               
+	                
+
+	                String errors[] = new String[6];
+	                errors[0] = Validator.isInt("Post Id", postId);
+	                errors[1] = Validator.stringLength("Post Content", postContent, 10, 500000);
+	                errors[2] = Validator.stringLength("Author", author, 2, 50);
+	                errors[3] = Validator.isInt("Likes", likes);
+	                errors[4] = Validator.isInt("Shares", shares);
+	                errors[5] = Validator.stringLength("Created at", createdAt, 8, 30);
+
+	                String allErrors = Validator.allError(errors);
+
+	                // Check if there are errors
+	                if (!allErrors.isEmpty()) {
+	                	showImportReport("error",  "Error! at line: "+  lineNo + " \n " + allErrors);
+	                    model.rollback();
+	                    hasError = true;
+	                    if(! shouldIgnoreImportError) {
+	                    	break;
+	                    }
+	                    else {
+	                    	continue;
+	                    }
+	                }
+
+	                int postId_n = Integer.parseInt(postId);
+	                int likes_n = Integer.parseInt(likes);
+	                int shares_n = Integer.parseInt(shares);
+	                
+	                
+	                // Check if post id already exists
+	                if (model.postIdExist(postId_n)) {
+	                	showImportReport("error",  "Post Id: '" + postId + "' already exists at line: "+  lineNo + " \n " + allErrors);
+	                    model.rollback();
+	                    hasError = true;
+	                    if(! shouldIgnoreImportError) {
+	                    	break;
+	                    }
+	                    else {
+	                    	continue;
+	                    }
+	                }
+
+	                // Insert the post data into the database
+	                if (model.insertPost(user.getUserId(), postId_n, postContent, author, likes_n, shares_n, createdAt)) {
+	                    
+	                	importedLine++;
+	                	showImportReport("success",  "Importing... ("+ importedLine + "post imported)");
+	                
+	                } else {
+	                	showImportReport("error",  "Database Error. Row not saved at line: "+  lineNo);
+	                    model.rollback();
+	                    hasError = true;
+	                    if(! shouldIgnoreImportError) {
+	                    	break;
+	                    }
+	                    else {
+	                    	continue;
+	                    }
+	                }
+	            }
+	            
+	            if(importedLine > 0 && !hasError) {
+	            	model.commit();
+	            	showImportReport("complete",  "Import Completed ("+ importedLine + " post imported)");
+	            }
+	            else if(importedLine > 0 && shouldIgnoreImportError) {
+	            	model.commit();
+	            	showImportReport("complete",  "Import Completed ("+ importedLine + " post imported)");
+	            }
+	            
+	            else if(importedLine == 0 && !hasError) {
+	            	showImportReport("complete",  "No post imported");
+	            }
+
+	            // Close the connection
+	            model.close();
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	            showImportReport("error",  "Failed to read the file.");
+	        }
+	        
+	    }
+	    importButton.setVisible(true);
+	}	
 	
 	
 	private void showTable(Post[] posts) {

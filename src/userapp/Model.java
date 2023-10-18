@@ -45,10 +45,13 @@ public class Model {
 		}
 	}
 	
-	public void commit() throws SQLException {
-		
-			connection.commit();
-		
+	public void commit(){
+			try {
+				connection.commit();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
 	
 	
@@ -273,7 +276,7 @@ public class Model {
 			query = "INSERT INTO posts (user_id, post_id, content, author, likes, shares) VALUES (?, ?, ?, ?, ?, ?)";
 		}
 		else {
-			query = "INSERT INTO posts (user_id, post_id, content, author, likes, shares, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)";
+			query = "INSERT INTO posts (user_id, post_id, content, author, likes, shares, date_time) VALUES (?, ?, ?, ?, ?, ?, ?)";
 		}
 		
 

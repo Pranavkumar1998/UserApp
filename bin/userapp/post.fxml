@@ -70,13 +70,13 @@
 						onAction="#exportPost" styleClass="menu-item"
 						text="Data Visualization" GridPane.rowIndex="4" />
 					<Hyperlink fx:id="vipAccessSubMenu2" visible="false"
-						onAction="#exportPost" styleClass="menu-item" text="Bulk Import"
+						onAction="#showImportPostPanel" styleClass="menu-item" text="Bulk Import"
 						GridPane.rowIndex="5" />
 
 				</GridPane>
 
 
-				<GridPane fx:id="addPostPanel" GridPane.columnIndex="1"
+				<GridPane visible="false"  fx:id="addPostPanel" GridPane.columnIndex="1"
 					hgap="20" vgap="10" alignment="CENTER"
 					style="-fx-background-color: #DFE; -fx-padding: 0 0 20 0;">
 
@@ -128,7 +128,7 @@
 
 				</GridPane>
 
-				<VBox fx:id="retrievePostPanel" GridPane.columnIndex="1"
+				<VBox visible="false" fx:id="retrievePostPanel" GridPane.columnIndex="1"
 					style="-fx-background-color: #FFF; -fx-padding: 0 0 20 0;">
 
 					<GridPane hgap="20" vgap="10" alignment="CENTER">
@@ -136,8 +136,8 @@
 						<Text text="Retrive Single Post" styleClass="generic-label"
 							GridPane.columnIndex="0" GridPane.rowIndex="0"
 							GridPane.columnSpan="2" />
-						<Text text="Retrive  Posts" styleClass="generic-label"
-							GridPane.columnIndex="3" GridPane.rowIndex="0"
+						<Text text="Retrive all  Posts" styleClass="generic-label"
+							GridPane.columnIndex="4" GridPane.rowIndex="0"
 							GridPane.columnSpan="3" />
 
 
@@ -150,16 +150,15 @@
 							GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
 
-
 						<TextField fx:id="noPostField"
 							styleClass="generic-input, number-input, small-input"
-							promptText="No. of Posts" GridPane.columnIndex="3"
+							promptText="No. of Posts" GridPane.columnIndex="4"
 							GridPane.rowIndex="1" />
-						<HBox fx:id="usernameListHolder" GridPane.columnIndex="4"
+						<HBox fx:id="usernameListHolder" GridPane.columnIndex="5"
 							GridPane.rowIndex="1" />
 						<Button onAction="#retrievePosts"
 							styleClass="submit-button, small-button" text="Search"
-							GridPane.columnIndex="5" GridPane.rowIndex="1" />
+							GridPane.columnIndex="6" GridPane.rowIndex="1" />
 
 					</GridPane>
 
@@ -170,15 +169,37 @@
 				</VBox>
 
 
-				<VBox fx:id="importPostPanel" GridPane.columnIndex="1"
+				<VBox visible="false" fx:id="importPostPanel" GridPane.columnIndex="1"
 					alignment="center"
 					style="-fx-background-color: #FFF; -fx-padding: 0 0 20 0;">
+					
+					<GridPane fx:id="blankPanel" GridPane.columnIndex="1"
+						hgap="10" vgap="10" alignment="CENTER"
+						style="-fx-background-color: #FFF; -fx-padding: 0 0 20 0;">
+						
+						<Text fx:id="importReportText" text="Format: postId, postContent, author, likes, shares, createdAt"  GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="5" />
+
+						<Label styleClass="generic-label, small-label" text="First Row Header:"
+							GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+						<Label styleClass="generic-label, small-label"
+							text="Ingore Import Error:" GridPane.columnIndex="4"
+							GridPane.rowIndex="1" />
+
+						<CheckBox fx:id="firstRowHeaderField"
+							GridPane.columnIndex="0" GridPane.rowIndex="1" />
+
+						<CheckBox fx:id="ignoreImportError"
+							GridPane.columnIndex="3" GridPane.rowIndex="1" />
+
+					</GridPane>
+					
 
 					<Button onAction="#importPost" styleClass="submit-button"
 						text="Bulk Import" />
 
-					<Text fx:id="importReportText" text="...Importing. 1 post Imported" styleClass="header"
-						style="-fx-font-size: 16px; -fx-padding: 40 10 20 10;" />
+					<Text fx:id="importReportText"
+						text="" styleClass="header"/>
 				</VBox>
 
 				<GridPane fx:id="blankPanel" GridPane.columnIndex="1"
@@ -187,8 +208,6 @@
 
 
 				</GridPane>
-
-
 
 
 			</GridPane>
