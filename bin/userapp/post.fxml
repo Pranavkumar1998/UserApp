@@ -21,16 +21,17 @@
 				<ColumnConstraints minWidth="10" hgrow="ALWAYS" />
 				<ColumnConstraints minWidth="10" hgrow="ALWAYS" />
 			</columnConstraints>
-			<Hyperlink fx:id="dashBoardMenu" onAction="#navigateScene" styleClass="menu-item"
-				text="DashBoard" GridPane.columnIndex="0" />
-			<Hyperlink fx:id="editAccountMenu" onAction="#navigateScene" styleClass="menu-item"
-				text="Edit Profile" GridPane.columnIndex="1" />
-			<Hyperlink fx:id="postMenu" onAction="#navigateScene" styleClass="menu-item" text="Post"
-				GridPane.columnIndex="2" />
-			<Hyperlink fx:id="nonVipMenu" onAction="#navigateScene" styleClass="menu-item" text="Become a VIP"
-				GridPane.columnIndex="3" />
-			<Hyperlink fx:id="logoutMenu" onAction="#navigateScene" styleClass="menu-item" text="logout"
-				GridPane.columnIndex="4" />
+			<Hyperlink fx:id="dashBoardMenu" onAction="#navigateScene"
+				styleClass="menu-item" text="DashBoard" GridPane.columnIndex="0" />
+			<Hyperlink fx:id="editAccountMenu"
+				onAction="#navigateScene" styleClass="menu-item" text="Edit Profile"
+				GridPane.columnIndex="1" />
+			<Hyperlink fx:id="postMenu" onAction="#navigateScene"
+				styleClass="menu-item" text="Post" GridPane.columnIndex="2" />
+			<Hyperlink fx:id="nonVipMenu" onAction="#navigateScene"
+				styleClass="menu-item" text="Become a VIP" GridPane.columnIndex="3" />
+			<Hyperlink fx:id="logoutMenu" onAction="#navigateScene"
+				styleClass="menu-item" text="logout" GridPane.columnIndex="4" />
 
 		</GridPane>
 	</top>
@@ -65,10 +66,12 @@
 						text="Delete Post" GridPane.rowIndex="2" />
 					<Hyperlink onAction="#exportPost" styleClass="menu-item"
 						text="Export Post" GridPane.rowIndex="3" />
-						<Hyperlink fx:id="vipAccessSubMenu1" visible="false" onAction="#exportPost" styleClass="menu-item"
+					<Hyperlink fx:id="vipAccessSubMenu1" visible="false"
+						onAction="#exportPost" styleClass="menu-item"
 						text="Data Visualization" GridPane.rowIndex="4" />
-						<Hyperlink fx:id="vipAccessSubMenu2"  visible="false" onAction="#exportPost" styleClass="menu-item"
-						text="Bulk Import" GridPane.rowIndex="5" />
+					<Hyperlink fx:id="vipAccessSubMenu2" visible="false"
+						onAction="#exportPost" styleClass="menu-item" text="Bulk Import"
+						GridPane.rowIndex="5" />
 
 				</GridPane>
 
@@ -152,17 +155,32 @@
 							styleClass="generic-input, number-input, small-input"
 							promptText="No. of Posts" GridPane.columnIndex="3"
 							GridPane.rowIndex="1" />
-						<HBox fx:id="usernameListHolder" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+						<HBox fx:id="usernameListHolder" GridPane.columnIndex="4"
+							GridPane.rowIndex="1" />
 						<Button onAction="#retrievePosts"
 							styleClass="submit-button, small-button" text="Search"
 							GridPane.columnIndex="5" GridPane.rowIndex="1" />
 
 					</GridPane>
 
-					<VBox fx:id="tableHolder" alignment="top_left" style="-fx-padding: 0 10 20 10;">
+					<VBox fx:id="tableHolder" alignment="top_left"
+						style="-fx-padding: 0 10 20 10;">
 					</VBox>
 
 				</VBox>
+
+
+				<VBox fx:id="importPostPanel" GridPane.columnIndex="1"
+					alignment="center"
+					style="-fx-background-color: #FFF; -fx-padding: 0 0 20 0;">
+
+					<Button onAction="#importPost" styleClass="submit-button"
+						text="Bulk Import" />
+
+					<Text fx:id="importReportText" text="...Importing. 1 post Imported" styleClass="header"
+						style="-fx-font-size: 16px; -fx-padding: 40 10 20 10;" />
+				</VBox>
+
 				<GridPane fx:id="blankPanel" GridPane.columnIndex="1"
 					hgap="20" vgap="10" alignment="CENTER"
 					style="-fx-background-color: #FFF; -fx-padding: 0 0 20 0;">

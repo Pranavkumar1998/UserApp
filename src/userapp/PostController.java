@@ -1,5 +1,8 @@
 package userapp;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -18,6 +21,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -52,6 +57,9 @@ public class PostController {
 	@FXML
 	TextField noPostField;
 
+	@FXML
+	Text importReportText;
+	
 	ComboBox<String> postUserField;
 
 	@FXML
@@ -260,7 +268,7 @@ public class PostController {
 			return;
 		}
 
-		if (model.insertPost(user.getUserId(), postId_n, postContent, author, likes_n, shares_n)) {
+		if (model.insertPost(user.getUserId(), postId_n, postContent, author, likes_n, shares_n, "" )) {
 
 			// Clear form
 			postIdField.setText("");
@@ -358,7 +366,156 @@ public class PostController {
 
 	}
 
-	public void showTable(Post[] posts) {
+	
+	
+	public void importPost(ActionEvent event) {
+		
+		Scene scene = ((Node) event.getSource()).getScene();
+		Stage stage = (Stage) scene.getWindow();
+		
+		Button importButton = (Button) event.getSource();
+		
+		importButton.setVisible(false);
+		
+		
+		int lineNo = 0;
+		int importedLine = 0;
+		boolean hasError = false;
+		
+	    FileChooser fileChooser = new FileChooser();
+	    fileChooser.setTitle("Open Resource File");
+	    fileChooser.getExtensionFilters().addAll(
+	            new ExtensionFilter("Text Files", "*.txt"),
+	            new ExtensionFilter("CSV Files", "*.csv")
+	    );
+
+	    File selectedFile = fileChooser.showOpenDialog(stage);
+
+	    if (selectedFile != null) {
+	        try (BufferedReader br = new BufferedReader(new FileReader(selectedFile))) {
+	            String line;
+	            Model model = new Model();
+	            model.startTransaction();
+
+	            while ((line = br.readLine()) != null) {
+	            	lineNo++;
+	            	
+	                String[] csvline = line.split(","); // Assuming CSV format
+
+	                // Check if the CSV line has the expected number of elements
+	                if (csvline.length < 6) {
+	                	showImportReport("error",  "Invalid CSV format at line: " + lineNo);
+	                    model.rollback();
+	                    hasError = true;
+	                    break;
+	                }
+
+	                String postId = csvline[0].trim();
+	                String postContent = csvline[1].trim();
+	                String author = csvline[2].trim();
+	                String likes = csvline[3].trim();
+	                String shares = csvline[4].trim();
+	                String createdAt = csvline[5].trim();
+	                
+	                //Sometimes there might be empty rows
+	                if(postId.equals("") && postContent.equals("") && author.equals("") && likes.equals("") && shares.equals("") && createdAt.equals("")){
+	                	continue;
+	                }
+	               
+	                
+
+	                String errors[] = new String[6];
+	                errors[0] = Validator.isInt("Post Id", postId);
+	                errors[1] = Validator.stringLength("Post Content", postContent, 10, 500000);
+	                errors[2] = Validator.stringLength("Author", author, 2, 50);
+	                errors[3] = Validator.isInt("Likes", likes);
+	                errors[4] = Validator.isInt("Shares", shares);
+	                errors[5] = Validator.stringLength("Created at", createdAt, 8, 30);
+
+	                String allErrors = Validator.allError(errors);
+
+	                // Check if there are errors
+	                if (!allErrors.isEmpty()) {
+	                	showImportReport("error",  "Error! at line: "+  lineNo + " \n " + allErrors);
+	                    model.rollback();
+	                    hasError = true;
+	                    break;
+	                }
+
+	                int postId_n = Integer.parseInt(postId);
+	                int likes_n = Integer.parseInt(likes);
+	                int shares_n = Integer.parseInt(shares);
+	                
+	                
+	                // Check if post id already exists
+	                if (model.postIdExist(postId_n)) {
+	                	showImportReport("error",  "Post Id: '" + postId + "' already exists at line: "+  lineNo + " \n " + allErrors);
+	                    model.rollback();
+	                    hasError = true;
+	                    break;
+	                }
+
+	                // Insert the post data into the database
+	                if (model.insertPost(user.getUserId(), postId_n, postContent, author, likes_n, shares_n, createdAt)) {
+	                    
+	                	importedLine++;
+	                	showImportReport("success",  "Importing... ("+ importedLine + "post imported)");
+	                
+	                } else {
+	                	showImportReport("error",  "Dtabase Error. Row not saved at line: "+  lineNo);
+	                    model.rollback();
+	                    hasError = true;
+	                    break;
+	                }
+	            }
+	            
+	            if(importedLine > 0 && !hasError) {
+	            	showImportReport("complete",  "Import Completed ("+ importedLine + "post imported)");
+	            }
+	            if(importedLine == 0 && !hasError) {
+	            	showImportReport("complete",  "No post imported");
+	            }
+
+	            // Close the connection
+	            model.close();
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	            showImportReport("error",  "Failed to read the file.");
+	        }
+	        
+	        
+	        importButton.setVisible(true);
+	    }
+	}	
+	
+	private void showImportReport(String type, String message) {
+		
+		importReportText.setText("");
+		
+		message = "\n" + message;
+		
+		if(type == "error") {
+			message = message + "\n" + " Rolled back, No row saved";
+			importReportText.setStyle("-fx-fill: red; -fx-font-style: italic; -fx-font-size: 14;");
+			importReportText.setText(message);
+			Alerts.show("error", "Import Error!", message, "");
+		}
+		else if(type == "success") {
+			importReportText.setStyle("-fx-fill: blue; -fx-font-style: italic; -fx-font-size: 14;");
+			importReportText.setText(message);
+		}
+		
+		else if(type == "complete") {
+			importReportText.setStyle("-fx-fill: green; -fx-font-style: normal; -fx-font-size: 16;");
+			importReportText.setText(message);
+			Alerts.show("info", "Import Completedr!", message, "");
+		}
+		
+		
+	}
+	
+	
+	private void showTable(Post[] posts) {
 
 		//Clear the table holder
 		tableHolder.getChildren().clear();

@@ -25,6 +25,33 @@ public class Model {
 		}
 	}
 
+	public void startTransaction() {
+		
+		try {
+			connection.setAutoCommit(false);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void rollback() {
+		
+		try {
+			connection.rollback();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void commit() throws SQLException {
+		
+			connection.commit();
+		
+	}
+	
+	
 	public boolean usernameExist(String username) {
 		boolean exists = false;
 		String sql = "SELECT COUNT(*) FROM users WHERE username = ?";
@@ -239,8 +266,16 @@ public class Model {
 		return exists;
 	}
 
-	public boolean insertPost(int userId, int postId, String postContent, String author, int likes, int shares) {
-		String query = "INSERT INTO posts (user_id, post_id, content, author, likes, shares) VALUES (?, ?, ?, ?, ?, ?)";
+	public boolean insertPost(int userId, int postId, String postContent, String author, int likes, int shares, String createdAt) {
+		
+		String query;
+		if(createdAt.equals("")) {
+			query = "INSERT INTO posts (user_id, post_id, content, author, likes, shares) VALUES (?, ?, ?, ?, ?, ?)";
+		}
+		else {
+			query = "INSERT INTO posts (user_id, post_id, content, author, likes, shares, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)";
+		}
+		
 
 		try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 			preparedStatement.setInt(1, userId);
@@ -249,6 +284,10 @@ public class Model {
 			preparedStatement.setString(4, author);
 			preparedStatement.setInt(5, likes);
 			preparedStatement.setInt(6, shares);
+			
+			if(! createdAt.equals("")) {
+				preparedStatement.setString(7, createdAt);
+			}
 
 			preparedStatement.executeUpdate();
 
