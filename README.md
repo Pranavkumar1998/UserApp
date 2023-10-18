@@ -45,7 +45,7 @@ java -jar --module-path /path/to/javafx-sdk-21.0.1/lib --add-modules javafx.cont
 </code>
 </pre>
 
-### First, You will have to:
+### Developer - Importing source:
 - clone this repo,
 - Import to your IDE environment
 - Setup and Configure JAvaFx
