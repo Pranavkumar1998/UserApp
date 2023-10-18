@@ -237,7 +237,7 @@ public class PostController {
 		result.ifPresent(postId -> {
 
 			String error = Validator.isInt("Post Id", postId);
-			if (error != "") {
+			if (! error.isEmpty()) {
 				Alerts.show("error", "Error!", error, "");
 				return;
 			}
@@ -280,7 +280,7 @@ public class PostController {
 		result.ifPresent(postId -> {
 
 			String error = Validator.isInt("Post Id", postId);
-			if (error != "") {
+			if (!error.isEmpty()) {
 				Alerts.show("error", "Error!", error, "");
 				return;
 			}
@@ -328,7 +328,7 @@ public class PostController {
 		String allErrors = Validator.allError(errors);
 
 		// Check if there are errors
-		if (allErrors != "") {
+		if (!allErrors.isEmpty()) {
 
 			Alerts.show("error", "Error!", allErrors, "");
 
@@ -376,7 +376,7 @@ public class PostController {
 
 		String error = Validator.isInt("Post Id", postId);
 
-		if (error != "") {
+		if (! error.isEmpty()) {
 
 			Alerts.show("error", "Error!", error, "");
 
@@ -420,7 +420,7 @@ public class PostController {
 		String allErrors = Validator.allError(errors);
 
 		// Check if there are errors
-		if (allErrors != "") {
+		if (!allErrors.isEmpty()) {
 
 			Alerts.show("error", "Error!", allErrors, "");
 

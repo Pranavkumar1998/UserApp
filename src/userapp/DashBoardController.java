@@ -124,7 +124,7 @@ public class DashBoardController {
 		String allErrors = Validator.allError(errors);
 
 		// Check if there are errors
-		if (allErrors != "") {
+		if (!allErrors.isEmpty()) {
 
 			Alerts.show("error", "Error!", allErrors, "");
 
@@ -164,7 +164,7 @@ public class DashBoardController {
 
 		String allErrors = Validator.allError(errors);
 		// Check if there are errors
-		if (allErrors != "") {
+		if (!allErrors.isEmpty()) {
 			Alerts.show("error", "Error!", allErrors, "");
 			return;
 		}
