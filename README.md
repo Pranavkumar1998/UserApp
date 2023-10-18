@@ -25,4 +25,15 @@
 - **JavaFX21**
 - **SQlite Database - sqlite-jdbc-3.40.0.0**
 
-- 
+
+## Running this Application
+**This application is a JavaFx application. You will have to go through this documentation for details explaination on how to run it**
+<br>
+<a href="https://openjfx.io/openjfx-docs/#install-javafx">Getting Started with JavaFX</a>
+### First, You will have to:
+- clone this repo,
+- Import to your IDE environment
+- Setup and Configure JAvaFx
+- Setup and Configure Sqlite - sqlite-jdbc-3.40.0.0 is in the project source, You will have to add it to class path
+- Create database file or run with already created database.  In the main class, there are two commented line which you can execute to create the database and tables. Then update the dataUrl path in  Model class
+- Now you can run the application
