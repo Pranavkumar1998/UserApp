@@ -12,7 +12,7 @@ public class Main extends Application {
 
 	public void start(Stage primaryStage) throws Exception {
 
-		Parent root = FXMLLoader.load(getClass().getResource("post.fxml"));
+		Parent root = FXMLLoader.load(getClass().getResource("login.fxml"));
 		primaryStage.setTitle("Login to Account");
 		primaryStage.setScene(new Scene(root, 900, 500));
 		primaryStage.show();
@@ -20,6 +20,7 @@ public class Main extends Application {
 //		 Model.createNewDatabase("UserApp.db");
 //		 Model.createTables("UserApp.db");
 
+	
 	}
 
 	public static void main(String[] args) {

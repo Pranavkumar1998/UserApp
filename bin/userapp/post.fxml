@@ -67,17 +67,17 @@
 					<Hyperlink onAction="#exportPost" styleClass="menu-item"
 						text="Export Post" GridPane.rowIndex="3" />
 					<Hyperlink fx:id="vipAccessSubMenu1" visible="false"
-						onAction="#exportPost" styleClass="menu-item"
+						onAction="#showChartHolderPanel" styleClass="menu-item"
 						text="Data Visualization" GridPane.rowIndex="4" />
 					<Hyperlink fx:id="vipAccessSubMenu2" visible="false"
-						onAction="#showImportPostPanel" styleClass="menu-item" text="Bulk Import"
-						GridPane.rowIndex="5" />
+						onAction="#showImportPostPanel" styleClass="menu-item"
+						text="Bulk Import" GridPane.rowIndex="5" />
 
 				</GridPane>
 
 
-				<GridPane visible="false"  fx:id="addPostPanel" GridPane.columnIndex="1"
-					hgap="20" vgap="10" alignment="CENTER"
+				<GridPane visible="false" fx:id="addPostPanel"
+					GridPane.columnIndex="1" hgap="20" vgap="10" alignment="CENTER"
 					style="-fx-background-color: #DFE; -fx-padding: 0 0 20 0;">
 
 					<Label styleClass="generic-label" text="Post ID:"
@@ -128,7 +128,8 @@
 
 				</GridPane>
 
-				<VBox visible="false" fx:id="retrievePostPanel" GridPane.columnIndex="1"
+				<VBox visible="false" fx:id="retrievePostPanel"
+					GridPane.columnIndex="1"
 					style="-fx-background-color: #FFF; -fx-padding: 0 0 20 0;">
 
 					<GridPane hgap="20" vgap="10" alignment="CENTER">
@@ -169,18 +170,22 @@
 				</VBox>
 
 
-				<VBox visible="false" fx:id="importPostPanel" GridPane.columnIndex="1"
-					alignment="center"
+				<VBox visible="false" fx:id="importPostPanel"
+					GridPane.columnIndex="1" alignment="center"
 					style="-fx-background-color: #FFF; -fx-padding: 0 0 20 0;">
-					
+
 					<GridPane fx:id="blankPanel" GridPane.columnIndex="1"
 						hgap="10" vgap="10" alignment="CENTER"
 						style="-fx-background-color: #FFF; -fx-padding: 0 0 20 0;">
-						
-						<Text fx:id="importReportText" text="Format: postId, postContent, author, likes, shares, createdAt"  GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="5" />
 
-						<Label styleClass="generic-label, small-label" text="First Row Header:"
-							GridPane.columnIndex="1" GridPane.rowIndex="1" />
+						<Text fx:id="importReportText"
+							text="Format: postId, postContent, author, likes, shares, createdAt"
+							GridPane.columnIndex="0" GridPane.rowIndex="0"
+							GridPane.columnSpan="5" />
+
+						<Label styleClass="generic-label, small-label"
+							text="First Row Header:" GridPane.columnIndex="1"
+							GridPane.rowIndex="1" />
 
 						<Label styleClass="generic-label, small-label"
 							text="Ingore Import Error:" GridPane.columnIndex="4"
@@ -193,13 +198,19 @@
 							GridPane.columnIndex="3" GridPane.rowIndex="1" />
 
 					</GridPane>
-					
+
 
 					<Button onAction="#importPost" styleClass="submit-button"
 						text="Bulk Import" />
 
-					<Text fx:id="importReportText"
-						text="" styleClass="header"/>
+					<Text fx:id="importReportText" text="" styleClass="header" />
+				</VBox>
+
+
+				<VBox visible="false" fx:id="chartHolderPanel"
+					GridPane.columnIndex="1" alignment="center"
+					style="-fx-background-color: #FFF; -fx-padding: 0 0 20 0;">
+
 				</VBox>
 
 				<GridPane fx:id="blankPanel" GridPane.columnIndex="1"

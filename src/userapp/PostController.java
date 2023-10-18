@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Optional;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,6 +28,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -80,7 +83,7 @@ public class PostController {
 	GridPane addPostPanel;
 
 	@FXML
-	VBox retrievePostPanel, importPostPanel;
+	VBox retrievePostPanel, importPostPanel, chartHolderPanel;
 
 	@FXML
 	HBox usernameListHolder;
@@ -140,6 +143,7 @@ public class PostController {
 		addPostPanel.setVisible(false);
 		blankPanel.setVisible(false);
 		importPostPanel.setVisible(false);
+		chartHolderPanel.setVisible(false);
 
 		headerLabel.setText("Retrieve Post(s)");
 
@@ -151,6 +155,7 @@ public class PostController {
 		retrievePostPanel.setVisible(false);
 		blankPanel.setVisible(false);
 		importPostPanel.setVisible(false);
+		chartHolderPanel.setVisible(false);
 
 		headerLabel.setText("Add Post");
 
@@ -162,10 +167,28 @@ public class PostController {
 		retrievePostPanel.setVisible(false);
 		blankPanel.setVisible(false);
 		importPostPanel.setVisible(true);
+		chartHolderPanel.setVisible(false);
 
 		headerLabel.setText("Bulk Import - VIP");
 
 	}
+	
+	public void showChartHolderPanel() {
+
+		addPostPanel.setVisible(false);
+		retrievePostPanel.setVisible(false);
+		blankPanel.setVisible(false);
+		importPostPanel.setVisible(false);
+		chartHolderPanel.setVisible(true);
+		
+		headerLabel.setText("Date Visualization of Post Shares");
+		
+		this.drawChart();
+
+	}
+	
+	
+	
 
 	public void deletePost(ActionEvent event) {
 
@@ -173,6 +196,7 @@ public class PostController {
 		retrievePostPanel.setVisible(false);
 		blankPanel.setVisible(true);
 		importPostPanel.setVisible(false);
+		chartHolderPanel.setVisible(false);
 
 		headerLabel.setText("Delete Post");
 
@@ -211,6 +235,8 @@ public class PostController {
 		addPostPanel.setVisible(false);
 		retrievePostPanel.setVisible(false);
 		blankPanel.setVisible(true);
+		importPostPanel.setVisible(false);
+		chartHolderPanel.setVisible(false);
 
 		headerLabel.setText("Export Post");
 
@@ -568,156 +594,33 @@ public class PostController {
 	
 
 	
-	public void importPost(ActionEvent event) {
+	private  void drawChart() {
 		
-		Scene scene = ((Node) event.getSource()).getScene();
-		Stage stage = (Stage) scene.getWindow();
+		//Clear the chart holder
+		chartHolderPanel.getChildren().clear();
+				
+		Model model = new Model();
 		
-		Button importButton = (Button) event.getSource();
+		int postShare_0_99 = model.getPostShare(0, 99);
+		int postShare_100_999 = model.getPostShare(100, 999);
+		int postShare_1000_plus = model.getPostShare(1000, -1);
 		
-		importButton.setVisible(false);
-	
-		boolean shouldIgnoreImportError = ignoreImportError.isSelected();
 		
-		int lineNo = 0;
-		int importedLine = 0;
-		boolean hasError = false;
+		model.close();
 		
-	    FileChooser fileChooser = new FileChooser();
-	    fileChooser.setTitle("Open Resource File");
-	    fileChooser.getExtensionFilters().addAll(
-	            new ExtensionFilter("Text Files", "*.txt"),
-	            new ExtensionFilter("CSV Files", "*.csv")
-	    );
-
-	    File selectedFile = fileChooser.showOpenDialog(stage);
-	    
-	    if (selectedFile != null) {
-	        try (BufferedReader br = new BufferedReader(new FileReader(selectedFile))) {
-	            String line;
-	            Model model = new Model();
-	            model.startTransaction();
-
-	            while ((line = br.readLine()) != null) {
-	            	lineNo++;
-	            	
-	            	// First row is header
-	            	if(lineNo == 1 && firstRowHeaderField.isSelected()) {
-	            		continue;
-	            	}
-	            	
-	                String[] csvline = line.split(","); // Assuming CSV format
-
-	                // Check if the CSV line has the expected number of elements
-	                if (csvline.length < 6) {
-	                	showImportReport("error",  "Invalid CSV format at line: " + lineNo);
-	                    model.rollback();
-	                    hasError = true;
-	                    if(! shouldIgnoreImportError) {
-	                    	break;
-	                    }
-	                    else {
-	                    	continue;
-	                    }
-	                }
-
-	                String postId = csvline[0].trim();
-	                String postContent = csvline[1].trim();
-	                String author = csvline[2].trim();
-	                String likes = csvline[3].trim();
-	                String shares = csvline[4].trim();
-	                String createdAt = csvline[5].trim();
-	                
-	                //Sometimes there might be empty rows
-	                if(postId.equals("") && postContent.equals("") && author.equals("") && likes.equals("") && shares.equals("") && createdAt.equals("")){
-	                	continue;
-	                }
-	               
-	                
-
-	                String errors[] = new String[6];
-	                errors[0] = Validator.isInt("Post Id", postId);
-	                errors[1] = Validator.stringLength("Post Content", postContent, 10, 500000);
-	                errors[2] = Validator.stringLength("Author", author, 2, 50);
-	                errors[3] = Validator.isInt("Likes", likes);
-	                errors[4] = Validator.isInt("Shares", shares);
-	                errors[5] = Validator.stringLength("Created at", createdAt, 8, 30);
-
-	                String allErrors = Validator.allError(errors);
-
-	                // Check if there are errors
-	                if (!allErrors.isEmpty()) {
-	                	showImportReport("error",  "Error! at line: "+  lineNo + " \n " + allErrors);
-	                    model.rollback();
-	                    hasError = true;
-	                    if(! shouldIgnoreImportError) {
-	                    	break;
-	                    }
-	                    else {
-	                    	continue;
-	                    }
-	                }
-
-	                int postId_n = Integer.parseInt(postId);
-	                int likes_n = Integer.parseInt(likes);
-	                int shares_n = Integer.parseInt(shares);
-	                
-	                
-	                // Check if post id already exists
-	                if (model.postIdExist(postId_n)) {
-	                	showImportReport("error",  "Post Id: '" + postId + "' already exists at line: "+  lineNo + " \n " + allErrors);
-	                    model.rollback();
-	                    hasError = true;
-	                    if(! shouldIgnoreImportError) {
-	                    	break;
-	                    }
-	                    else {
-	                    	continue;
-	                    }
-	                }
-
-	                // Insert the post data into the database
-	                if (model.insertPost(user.getUserId(), postId_n, postContent, author, likes_n, shares_n, createdAt)) {
-	                    
-	                	importedLine++;
-	                	showImportReport("success",  "Importing... ("+ importedLine + "post imported)");
-	                
-	                } else {
-	                	showImportReport("error",  "Database Error. Row not saved at line: "+  lineNo);
-	                    model.rollback();
-	                    hasError = true;
-	                    if(! shouldIgnoreImportError) {
-	                    	break;
-	                    }
-	                    else {
-	                    	continue;
-	                    }
-	                }
-	            }
-	            
-	            if(importedLine > 0 && !hasError) {
-	            	model.commit();
-	            	showImportReport("complete",  "Import Completed ("+ importedLine + " post imported)");
-	            }
-	            else if(importedLine > 0 && shouldIgnoreImportError) {
-	            	model.commit();
-	            	showImportReport("complete",  "Import Completed ("+ importedLine + " post imported)");
-	            }
-	            
-	            else if(importedLine == 0 && !hasError) {
-	            	showImportReport("complete",  "No post imported");
-	            }
-
-	            // Close the connection
-	            model.close();
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	            showImportReport("error",  "Failed to read the file.");
-	        }
-	        
-	    }
-	    importButton.setVisible(true);
+		ObservableList<PieChart.Data> pieChartData =
+                FXCollections.observableArrayList(
+                new PieChart.Data("#Share between 0 and 99", postShare_0_99),
+                new PieChart.Data("#Share between 100 and 999", postShare_100_999),
+                new PieChart.Data("#Share equal and above 1000", postShare_1000_plus));
+        final PieChart chart = new PieChart(pieChartData);
+       
+        chart.setTitle("Post #Share Distribution");
+		
+        chartHolderPanel.getChildren().add(chart);
+		
 	}	
+	
 	
 	
 	private void showTable(Post[] posts) {

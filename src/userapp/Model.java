@@ -366,6 +366,41 @@ public class Model {
 
 		
 	}
+	
+	
+	public int getPostShare(int min, int max) {
+		String sql = "";
+		if (max == -1) { // No limit for max bound
+			sql = "SELECT COUNT(*) AS total_count FROM posts WHERE shares >= ?";
+		} else {
+			sql = "SELECT COUNT(*) AS total_count FROM posts WHERE shares between ? AND ?";
+		}
+
+		try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			if (max == -1) {
+				preparedStatement.setInt(1, min);
+			} else {
+				preparedStatement.setInt(1, min);
+				preparedStatement.setInt(2, max);
+			}
+
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			if (resultSet.next()) {
+
+				return resultSet.getInt("total_count");
+				
+				
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return 0;
+		
+	}
+	
 
 	
 	public boolean deletePost(int postId) {
