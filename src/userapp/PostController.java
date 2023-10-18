@@ -96,6 +96,10 @@ public class PostController {
 
 	private User user;
 
+	
+	/**
+     * Initialize the controller.
+     */
 	public void initialize(User user) {
 
 		this.user = user;
@@ -107,7 +111,11 @@ public class PostController {
 
 		this.loadUsernames();
 	}
+	
 
+	/**
+     * method for menu navigation.
+     */
 	public void navigateScene(ActionEvent event) {
 
 		Hyperlink hyperlink = (Hyperlink) event.getSource();
@@ -122,6 +130,11 @@ public class PostController {
 
 	}
 
+	
+	/**
+     * Create a Combobox for user selection
+     * use during post retrieval for a user
+     */
 	private void loadUsernames() {
 
 		Model model = new Model();
@@ -133,10 +146,12 @@ public class PostController {
 		postUserField.maxWidth(100);
 		
 		usernameListHolder.getChildren().add(postUserField);
-
 		
 	}
 
+	/**
+     * Switch to the post retrieval Panel
+     */
 	public void showRetrievePostPanel() {
 
 		retrievePostPanel.setVisible(true);
@@ -149,6 +164,9 @@ public class PostController {
 
 	}
 
+	/**
+     * Switch to the Add pot panel
+     */
 	public void showAddPostPanel() {
 
 		addPostPanel.setVisible(true);
@@ -157,10 +175,14 @@ public class PostController {
 		importPostPanel.setVisible(false);
 		chartHolderPanel.setVisible(false);
 
+		// Set the page header
 		headerLabel.setText("Add Post");
 
 	}
 	
+	/**
+     * Switch to the Post Import Panel .
+     */
 	public void showImportPostPanel() {
 
 		addPostPanel.setVisible(false);
@@ -173,6 +195,9 @@ public class PostController {
 
 	}
 	
+	/**
+     * Switch to the Chart Panel .
+     */
 	public void showChartHolderPanel() {
 
 		addPostPanel.setVisible(false);
@@ -190,6 +215,9 @@ public class PostController {
 	
 	
 
+	/**
+     * Function to delete Post .
+     */
 	public void deletePost(ActionEvent event) {
 
 		addPostPanel.setVisible(false);
@@ -230,6 +258,9 @@ public class PostController {
 
 	}
 
+	/**
+     * Method to export post .
+     */
 	public void exportPost(ActionEvent event) {
 
 		addPostPanel.setVisible(false);
@@ -275,6 +306,9 @@ public class PostController {
 
 	}
 
+	/**
+     * Method to create Post .
+     */
 	public void createPost(ActionEvent event) {
 
 		String postId = postIdField.getText();

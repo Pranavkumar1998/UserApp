@@ -1,3 +1,4 @@
+
 package userapp;
 
 import java.io.IOException;
@@ -201,7 +202,7 @@ public class DashBoardController {
 		subscribeHBox1.setVisible(false);
 		subscribeHBox2.setVisible(false);
 		subscribeHBox3.setVisible(true);
-		
+
 		// Make the user a vip user
 		user.setVip(true);
 
