@@ -30,6 +30,21 @@
 **This application is a JavaFx application. You will have to go through this documentation for details explaination on how to run it**
 <br>
 <a href="https://openjfx.io/openjfx-docs/#install-javafx">Getting Started with JavaFX</a>
+
+### Running the jar File
+You can find the source file UserApp.jar in this repo. <br>
+You can run the app using the command below. **Ensure** you also downloaded the database folder in this repo. It should be in the same path as the jar file.
+<pre>
+<code>
+#Window
+java -jar --module-path ${path_to_folder}\openjfx-21_windows-x64_bin-sdk\javafx-sdk-21\lib --add-modules javafx.controls,javafx.fxml  UserApp.jar
+
+#Mac/Linux
+java -jar --module-path /path/to/javafx-sdk-21.0.1/lib --add-modules javafx.controls,javafx.fxml UserApp.jar
+</code>
+</code>
+</pre>
+
 ### First, You will have to:
 - clone this repo,
 - Import to your IDE environment
