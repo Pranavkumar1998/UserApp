@@ -130,7 +130,7 @@ public class Model {
 	 * @return True if the user was successfully inserted, false otherwise.
 	 */
 	public boolean insertUser(String username, String firstName, String lastName, String password) {
-	    String sql = "INSERT INTO users (username, first_name, last_name, password) VALUES (?, ?, ?, ?";
+	    String sql = "INSERT INTO users (username, first_name, last_name, password) VALUES (?, ?, ?, ?)";
 
 	    try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 	        preparedStatement.setString(1, username);
